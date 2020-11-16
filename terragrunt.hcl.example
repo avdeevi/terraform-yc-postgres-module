@@ -1,0 +1,50 @@
+include {
+  path = find_in_parent_folders()
+}
+
+terraform {
+  source = "git::git@gitlab.com:mvideoru/tech-platform/docctip/terraform/modules//postgresql-cluster-yandex.git"
+}
+
+inputs = {
+
+env  = "test"
+folder_id  = "xxxxxxxxxxxxxxxx"
+name = "cluster-name"
+type = "PRESTABLE"
+network_id = "xxxxxxxxxxxxxxxx"
+pg_version = "10"  # 11, 12
+autofailover = true
+backup_hour = "05"
+backup_minutes = "15"
+resource_preset = "s2.micro" # 2core/8Gb
+disk_size = 100
+pooling_mode = "TRANSACTION" #  <SESSION, TRANSACTION или STATEMENT>
+databases = [
+    {
+    db="name01",
+    user="login01",
+    pass="12345678",
+    lc_collate="ru_RU.UTF-8",
+    lc_type="ru_RU.UTF-8",
+    extensions = [{name="postgis", version=""}]
+    },
+   {
+    db="name02",
+    user="login02",
+    pass="12345678910",
+    lc_collate="ru_RU.UTF-8",
+    lc_type="ru_RU.UTF-8",
+    extensions = []
+    },
+  ]
+node_num = 3 # минимум три для отказоуйстойчивости
+users = [
+{ name="user1", pass="111111111", db="base02" },
+{ name="user2", pass="222222222", db="base01" },
+{ name="user3", pass="333333333", db="base01" },
+{ name="user4", pass="444444444", db="base02" },
+]  # тут можно создать дополнительных юзеров и затем им создавать выделенные схемы в базе.
+
+}
+
