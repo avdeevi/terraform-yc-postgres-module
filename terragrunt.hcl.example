@@ -3,7 +3,7 @@ include {
 }
 
 terraform {
-  source = "git::git@gitlab.com:mvideoru/tech-platform/docctip/terraform/modules//postgresql-cluster-yandex.git"
+  source = "git::git@gitlab.com:mvideoru/tech-platform/docctip/terraform/modules/postgresql-cluster-yandex.git"
 }
 
 inputs = {
