@@ -40,10 +40,10 @@ databases = [
   ]
 node_num = 3 # минимум три для отказоуйстойчивости
 users = [
-{ name="user1", pass="111111111", db="base02" },
-{ name="user2", pass="222222222", db="base01" },
-{ name="user3", pass="333333333", db="base01" },
-{ name="user4", pass="444444444", db="base02" },
+{ name="user1", pass="111111111", db=["base02"] },
+{ name="user2", pass="222222222", db=["base01"] },
+{ name="user3", pass="333333333", db=["base01","base02"] },
+{ name="user4", pass="444444444", db=["base02","base01"] },
 ]  # тут можно создать дополнительных юзеров и затем им создавать выделенные схемы в базе.
 
 }
