@@ -69,10 +69,13 @@ resource "yandex_mdb_postgresql_cluster" "pg_cluster" {
   content {
     name     = user.value.user
     password = user.value.pass
-    permission {
-      database_name = user.value.db
+    dynamic "permission" {
+    for_each = user.value.db
+    content {
+      database_name = permisson.value
+            }
+      }
     }
-   }
   }
 
   dynamic "user" {
