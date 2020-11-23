@@ -65,17 +65,6 @@ resource "yandex_mdb_postgresql_cluster" "pg_cluster" {
 
 
   dynamic "user" {
-  for_each = var.databases
-  content {
-    name     = user.value.user
-    password = user.value.pass
-    permission {
-      database_name = user.value.db
-      }
-    }
-  }
-
-  dynamic "user" {
   for_each =  var.users
   content {
        name = user.value.name
@@ -89,6 +78,17 @@ resource "yandex_mdb_postgresql_cluster" "pg_cluster" {
    }
   }
 
+
+  dynamic "user" {
+  for_each = var.databases
+  content {
+    name     = user.value.user
+    password = user.value.pass
+    permission {
+      database_name = user.value.db
+      }
+    }
+  }
 
   dynamic "host" {
     for_each = slice(local.subnets,0,var.node_num)
