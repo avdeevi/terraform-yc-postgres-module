@@ -16,7 +16,8 @@ subnets = [ for  k,v in data.terraform_remote_state.subnets.outputs["private_sub
        {
             zone = v.zone,
             id = v.id,
-       }
+       } if length(regexall("subnet${var.subnet_index}", v.name)) > 0
+
     ]
 }
 
