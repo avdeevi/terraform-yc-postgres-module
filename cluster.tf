@@ -1,24 +1,28 @@
-data "terraform_remote_state" "subnets" {
-  backend = "s3"
-  config = {
-    endpoint                    = "storage.yandexcloud.net"
-    bucket                      = "terraform-state-backet"
-    region                      = "us-east-1"
-    key                         = "${var.env}/network/terraform.tfstate"
-    skip_region_validation      = true
-    skip_credentials_validation = true
-  }
+data "yandex_resourcemanager_folder" "my_folder" {
+  name =  var.env
+}
+
+data "yandex_vpc_subnet" "my_subnet_a" {
+  name = "${var.env}-private-subnet${var.subnet_index}-a"
+  folder_id = data.yandex_resourcemanager_folder.my_folder.id
+}
+
+data "yandex_vpc_subnet" "my_subnet_b" {
+  name = "${var.env}-private-subnet${var.subnet_index}-b"
+  folder_id = data.yandex_resourcemanager_folder.my_folder.id
+}
+
+data "yandex_vpc_subnet" "my_subnet_c" {
+  name = "${var.env}-private-subnet${var.subnet_index}-c"
+  folder_id = data.yandex_resourcemanager_folder.my_folder.id
 }
 
 locals{
-subnets = [ for  k,v in data.terraform_remote_state.subnets.outputs["private_subnets"] :
-
-       {
-            zone = v.zone,
-            id = v.id,
-       } if length(regexall("subnet${var.subnet_index}", v.name)) > 0
-
-    ]
+subnets = [
+        data.yandex_vpc_subnet.my_subnet_a,
+        data.yandex_vpc_subnet.my_subnet_b,
+        data.yandex_vpc_subnet.my_subnet_c
+          ]
 }
 
 resource "yandex_mdb_postgresql_cluster" "pg_cluster" {
