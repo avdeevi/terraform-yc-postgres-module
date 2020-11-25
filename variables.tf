@@ -60,6 +60,6 @@ default = "SESSION"
 
 variable "subnet_index" {
   type = string
-  default = ""
+  default = "1"
 }
 
